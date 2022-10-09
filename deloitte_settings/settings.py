@@ -41,7 +41,6 @@ if ENVIRONMENT == 'development':
 
         # Imported Apps
         'storages',
-        'drf_spectacular',
 
         # Project Apps
         'apps.abstract',
@@ -66,7 +65,6 @@ else:
 
         # Imported Apps
         'storages',
-        'drf_spectacular',
 
         # Project Apps
         'apps.abstract',
@@ -178,15 +176,4 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     ),
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-}
-
-# Configurations to API schema where use drf-spectacular app
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'Project test Deloitte',
-    'DESCRIPTION': 'Api for a simple student and grade registration system',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
-    'SCHEMA_PATH_PREFIX': r'/api/v[0-9]',
-    'SERVE_PERMISSIONS': ['rest_framework.permissions.AllowAny']
 }

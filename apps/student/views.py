@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from rest_framework import permissions, status
 from rest_framework.generics import get_object_or_404
+from rest_framework.schemas.openapi import AutoSchema
 from apps.abstract.views import AbstractViewApi
 from apps.student.models import Student
 from apps.student.schemas import StudentSchema, StudentUpdateSchema
@@ -12,6 +13,7 @@ class StudentApi(AbstractViewApi):
     http_method_names = ['post', 'get']
     serializer_class = StudentSchema
     queryset = Student.objects.all
+    schema = AutoSchema(tags=["Estudante"])
     query_params = [
         {
             "name": "nome",
@@ -27,7 +29,7 @@ class StudentApi(AbstractViewApi):
             "in": "query",
             "required": False,
             "description": "Data de nascimento do aluno",
-            "schema": {"type": "string"}
+            "schema": {"type": "date"}
         },
         {
             "name": "email",
@@ -65,6 +67,7 @@ class StudentEditApi(AbstractViewApi):
     http_method_names = ['post', 'get', 'put', 'delete']
     serializer_class = StudentUpdateSchema
     queryset = Student.objects.all
+    schema = AutoSchema(tags=["Estudante"])
 
     def put(self, request, *args, **kwargs):
         """

@@ -15,14 +15,14 @@ class StudentTest(AbstractTest):
     def setUp(self):
         """Assert get users detail"""
         super(StudentTest, self).setUp()
-        response = self.client.post('/api/v1/alunos/', self.get_student())
+        response = self.client.post('/api/v1/aluno/', self.get_student())
         self.assertEqual(response.status_code, 201)
         self.__student_id = json.loads(response.content)['aluno']['id']
 
     def test_api_get_students(self):
         """Assert get users detail"""
         self.printl('Lista de estudantes')
-        response = self.client.get('/api/v1/alunos/')
+        response = self.client.get('/api/v1/aluno/')
         self.assertEqual(response.status_code, 200)
 
     def test_api_create_student(self):
@@ -33,14 +33,14 @@ class StudentTest(AbstractTest):
             'email': 'temporary1@temporary.com',
             'birthday': '2022-10-07'
         }
-        response = self.client.post('/api/v1/alunos/', student)
+        response = self.client.post('/api/v1/aluno/', student)
         self.assertEqual(response.status_code, 201)
 
     def test_api_filter_student(self):
         """Assert get student detail"""
         email = 'temporary@temporary.com'
         self.printl('Filtrar estudante')
-        response = self.client.get(f'/api/v1/alunos/?email={email}')
+        response = self.client.get(f'/api/v1/aluno/?email={email}')
         self.assertEqual(response.status_code, 200)
         students = json.loads(response.content)['alunos']
         self.assertEqual(1, len(students))
@@ -66,7 +66,7 @@ class StudentTest(AbstractTest):
         self.assertEqual(response.status_code, 200)
 
     def get_url_detail(self):
-        return f'/api/v1/alunos/{self.__student_id}/'
+        return f'/api/v1/aluno/{self.__student_id}/'
 
     def get_student(self):
         """Get Student"""

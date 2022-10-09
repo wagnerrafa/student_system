@@ -2,18 +2,22 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from django.views.generic import TemplateView
+from rest_framework import permissions
+from rest_framework.schemas import get_schema_view
 
 urlpatterns = [
-    # Django urls
     path('admin/', admin.site.urls),
-
-    # Api urls
-    path('api/v1/alunos/', include('apps.student.urls', namespace='student')),
+    path('api/v1/disciplina/', include('apps.discipline.urls', namespace='discipline')),
+    path('api/v1/aluno/', include('apps.student.urls', namespace='student')),
     path('api/v1/user/', include('apps.abstract.urls', namespace='abstract')),
-    path('api/v1/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/v1/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-
+    path('api/v1/docs/',
+         TemplateView.as_view(template_name='api_documentation.html', extra_context={'schema_url': 'schema-api'}),
+         name='api-docs'),
+    path('api/v1/docs/deloitte/', get_schema_view(title="Project test Deloitte",
+                                                  description="Api for a simple student and grade registration system",
+                                                  version="1.0.0", permission_classes=[permissions.AllowAny]),
+         name='schema-api'),
 ]
 
 if settings.DEBUG:

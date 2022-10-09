@@ -1,10 +1,11 @@
+import datetime
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework import generics, status, serializers
 from rest_framework.filters import BaseFilterBackend
-
+from rest_framework.schemas.openapi import AutoSchema
 from apps.abstract.schemas import UserSchema
 from apps.permissions.views import IsAuthenticatedOrWriteOnly
 
@@ -18,6 +19,7 @@ class UserApi(generics.GenericAPIView):
     permission_classes = (IsAuthenticatedOrWriteOnly,)
     http_method_names = ['post', 'get', 'put', 'delete']
     serializer_class = UserSchema
+    schema = AutoSchema(tags=["User"])
 
     def post(self, request, *args, **kwargs):
         """
@@ -66,12 +68,45 @@ class AbstractViewApi(generics.GenericAPIView):
     def get_schema_operation_parameters(view):
         return view.query_params
 
+    @staticmethod
+    def __parse_date(date_string):
+        """Parse sting to date"""
+        return datetime.datetime.strptime(date_string, '%m-%d-%Y').date()
+
+    @staticmethod
+    def __parse_datetime(date_string):
+        """Parse sting to datetime"""
+        return datetime.datetime.strptime(date_string, '%m-%d-%Y %H:%M:%S')
+
+    def __get_type_by_instance(self, instance):
+        """Get instance, type, parser and legend by field schema type"""
+        types = {
+            'string': {'type': str, 'parser': str, 'legend': 'string'},
+            'date': {'type': datetime.date, 'parser': self.__parse_date, 'legend': '01-12-2001'},
+            'datetime': {'type': datetime.date, 'parser': self.__parse_datetime, 'legend': '01-12-2001 H:M:S'},
+            'float': {'type': float, 'parser': float, 'legend': '01.00'},
+            'int': {'type': int, 'parser': int, 'legend': '1'},
+        }
+
+        return types.get(instance, str)
+
     def get_query_params(self):
         """Validate parameters received in query params, returning query values"""
         query = {}
-
         for valid_params in self.query_params:
-            value = self.request.query_params.get(valid_params['name'])
+            type_instance = valid_params['schema']['type']
+            field = valid_params['field']
+            name = valid_params['name']
+            value = self.request.query_params.get(name)
             if value:
-                query[valid_params['field']] = value
+                instance = self.__get_type_by_instance(type_instance)
+                try:
+                    value = instance['parser'](value)
+                except:
+                    pass
+                if isinstance(value, instance['type']):
+                    query[field] = value
+                else:
+                    raise serializers.ValidationError(
+                        [{name: f'Campo no formato inválido. Deve ser estar no formato {instance["legend"]}'}])
         return query
