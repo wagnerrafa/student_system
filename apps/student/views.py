@@ -1,3 +1,4 @@
+from django.db.models import ProtectedError
 from django.http import JsonResponse
 from rest_framework import permissions, status
 from rest_framework.generics import get_object_or_404
@@ -12,12 +13,12 @@ class StudentApi(AbstractViewApi):
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ['post', 'get']
     serializer_class = StudentSchema
-    queryset = Student.objects.all
+    queryset = Student.objects
     schema = AutoSchema(tags=["Estudante"])
     query_params = [
         {
             "name": "nome",
-            "field": "name",
+            "field": "name__icontains",
             "in": "query",
             "required": False,
             "description": "Nome do aluno",
@@ -33,7 +34,7 @@ class StudentApi(AbstractViewApi):
         },
         {
             "name": "email",
-            "field": "email",
+            "field": "email__icontains",
             "in": "query",
             "required": False,
             "description": "Email do aluno",
@@ -56,7 +57,7 @@ class StudentApi(AbstractViewApi):
     def get(self, request, *args, **kwargs):
         """Get Students details"""
         params = self.get_query_params()
-        students = self.queryset().filter(**params)
+        students = self.queryset.filter(**params)
         students = self.serializer_class(students, many=True).data
         return JsonResponse({'alunos': students})
 
@@ -88,10 +89,12 @@ class StudentEditApi(AbstractViewApi):
         return JsonResponse({'aluno': StudentSchema(student, many=False).data}, status=code)
 
     def delete(self, request, *args, **kwargs):
-        """Delete User"""
-        # TODO: remove other models when they are built
+        """Delete User if there is no reference to it"""
         student_id = kwargs.get('id')
         student = get_object_or_404(Student, id=student_id)
-        if student:
+        try:
             student.delete()
-        return JsonResponse({'detail': 'Aluno deletado'})
+            return JsonResponse({'detail': 'Aluno deletado'})
+        except ProtectedError:
+            return JsonResponse(
+                {'detail': 'Aluno não deletado, há referências a ele e por isso não pode ser removido'})

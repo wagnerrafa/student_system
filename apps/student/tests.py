@@ -5,28 +5,15 @@ from apps.abstract.tests import AbstractTest
 
 class StudentTest(AbstractTest):
     """Student related tests"""
-    __student_id = None
-    __student = {
-        'name': 'temporary',
-        'email': 'temporary@temporary.com',
-        'birthday': '2022-10-07'
-    }
-
-    def setUp(self):
-        """Assert get users detail"""
-        super(StudentTest, self).setUp()
-        response = self.client.post('/api/v1/aluno/', self.get_student())
-        self.assertEqual(response.status_code, 201)
-        self.__student_id = json.loads(response.content)['aluno']['id']
 
     def test_api_get_students(self):
-        """Assert get users detail"""
+        """Assert get students detail"""
         self.printl('Lista de estudantes')
         response = self.client.get('/api/v1/aluno/')
         self.assertEqual(response.status_code, 200)
 
     def test_api_create_student(self):
-        """Assert get users detail"""
+        """Assert create student"""
         self.printl('Criar estudante')
         student = {
             'name': 'temporary1',
@@ -37,7 +24,7 @@ class StudentTest(AbstractTest):
         self.assertEqual(response.status_code, 201)
 
     def test_api_filter_student(self):
-        """Assert get student detail"""
+        """Assert get students detail"""
         email = 'temporary@temporary.com'
         self.printl('Filtrar estudante')
         response = self.client.get(f'/api/v1/aluno/?email={email}')
@@ -59,20 +46,11 @@ class StudentTest(AbstractTest):
         response = self.client.put(self.get_url_detail(), user, content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
-    def test_api_delete_user(self):
-        """Assert Delete User"""
+    def test_api_delete_student(self):
+        """Assert Delete Student"""
         self.printl('Remover estudante')
         response = self.client.delete(self.get_url_detail())
         self.assertEqual(response.status_code, 200)
 
     def get_url_detail(self):
-        return f'/api/v1/aluno/{self.__student_id}/'
-
-    def get_student(self):
-        """Get Student"""
-        return self.__student
-
-    def set_student(self, field, value):
-        """Update field in Student, return Student"""
-        self.__student[field] = value
-        return self.__student
+        return f'/api/v1/aluno/{self.get_student_id()}/'

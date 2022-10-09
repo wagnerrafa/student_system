@@ -71,19 +71,19 @@ class AbstractViewApi(generics.GenericAPIView):
     @staticmethod
     def __parse_date(date_string):
         """Parse sting to date"""
-        return datetime.datetime.strptime(date_string, '%m-%d-%Y').date()
+        return datetime.datetime.strptime(date_string, '%Y-%m-%d').date()
 
     @staticmethod
     def __parse_datetime(date_string):
         """Parse sting to datetime"""
-        return datetime.datetime.strptime(date_string, '%m-%d-%Y %H:%M:%S')
+        return datetime.datetime.strptime(date_string, '%Y-%m-%d %H:%M')
 
     def __get_type_by_instance(self, instance):
         """Get instance, type, parser and legend by field schema type"""
         types = {
             'string': {'type': str, 'parser': str, 'legend': 'string'},
-            'date': {'type': datetime.date, 'parser': self.__parse_date, 'legend': '01-12-2001'},
-            'datetime': {'type': datetime.date, 'parser': self.__parse_datetime, 'legend': '01-12-2001 H:M:S'},
+            'date': {'type': datetime.date, 'parser': self.__parse_date, 'legend': '2001-12-30'},
+            'datetime': {'type': datetime.date, 'parser': self.__parse_datetime, 'legend': '2001-12-30 23:01'},
             'float': {'type': float, 'parser': float, 'legend': '01.00'},
             'int': {'type': int, 'parser': int, 'legend': '1'},
         }
@@ -108,5 +108,5 @@ class AbstractViewApi(generics.GenericAPIView):
                     query[field] = value
                 else:
                     raise serializers.ValidationError(
-                        [{name: f'Campo no formato inválido. Deve ser estar no formato {instance["legend"]}'}])
+                        {name: f'Campo no formato inválido. Deve ser estar no formato {instance["legend"]}'})
         return query

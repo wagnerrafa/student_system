@@ -46,7 +46,8 @@ if ENVIRONMENT == 'development':
         'apps.abstract',
         'apps.student',
         'apps.permissions',
-        'apps.discipline'
+        'apps.discipline',
+        'apps.report_card',
     ]
 else:
     INSTALLED_APPS = [
@@ -70,7 +71,8 @@ else:
         'apps.abstract',
         'apps.student',
         'apps.permissions',
-        'apps.discipline'
+        'apps.discipline',
+        'apps.report_card',
     ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

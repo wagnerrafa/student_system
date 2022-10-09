@@ -21,7 +21,7 @@ class DisciplineApi(AbstractViewApi):
     query_params = [
         {
             "name": "nome",
-            "field": "name",
+            "field": "name__icontains",
             "in": "query",
             "required": False,
             "description": "Nome da disciplina",
@@ -73,7 +73,7 @@ class DisciplineEditApi(AbstractViewApi):
         """
         discipline_id = kwargs.get('id')
         discipline = get_object_or_404(Discipline, id=discipline_id)
-        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer = self.serializer_class(data=request.data, context={'request': request, 'discipline': discipline})
         serializer.is_valid(raise_exception=True)
         update_user = serializer.validated_data
         code = status.HTTP_200_OK
@@ -85,13 +85,12 @@ class DisciplineEditApi(AbstractViewApi):
         return JsonResponse({'disciplina': DisciplineSchema(discipline, many=False).data}, status=code)
 
     def delete(self, request, *args, **kwargs):
-        """Delete Disciplina"""
+        """Delete Disciplina if there is no reference to it"""
         discipline_id = kwargs.get('id')
         discipline = get_object_or_404(Discipline, id=discipline_id)
-        if discipline:
-            try:
-                discipline.delete()
-                return JsonResponse({'detail': 'Disciplina deletada'})
-            except ProtectedError as e:
-                print(e, 'err protected\n')
-        return JsonResponse({'detail': 'Disciplina não deletada'})
+        try:
+            discipline.delete()
+            return JsonResponse({'detail': 'Disciplina deletada'})
+        except ProtectedError:
+            return JsonResponse(
+                {'detail': 'Disciplina não deletada, há referências a ela e por isso não pode ser removida'})

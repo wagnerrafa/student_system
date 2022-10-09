@@ -8,8 +8,9 @@ from rest_framework.schemas import get_schema_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/disciplina/', include('apps.discipline.urls', namespace='discipline')),
     path('api/v1/aluno/', include('apps.student.urls', namespace='student')),
+    path('api/v1/disciplina/', include('apps.discipline.urls', namespace='discipline')),
+    path('api/v1/boletim/', include('apps.report_card.urls', namespace='report_card')),
     path('api/v1/user/', include('apps.abstract.urls', namespace='abstract')),
     path('api/v1/docs/',
          TemplateView.as_view(template_name='api_documentation.html', extra_context={'schema_url': 'schema-api'}),
