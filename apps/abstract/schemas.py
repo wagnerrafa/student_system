@@ -29,11 +29,11 @@ class AbstractUpdateModelSchema(AbstractModelSchema):
 class UserSchema(serializers.ModelSerializer):
     """Serializer AbstractModel fields"""
     renderer_classes = [renderers.JSONRenderer]
+    password = serializers.CharField(min_length=8, write_only=True, required=True)
     password_confirm = serializers.CharField(min_length=8, write_only=True, required=True)
 
     class Meta:
         model = User
-
         fields = ['email', 'username', 'first_name', 'last_name', 'password', 'password_confirm']
 
     @staticmethod
