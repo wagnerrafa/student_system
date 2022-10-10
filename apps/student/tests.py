@@ -1,5 +1,4 @@
 import json
-
 from apps.abstract.tests import AbstractTest
 
 

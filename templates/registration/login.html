@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<div style="padding: 20px 0 10px 38px">
+    {% if request.user.is_authenticated %}
+        <form method="post" action="/logout/">
+            {% csrf_token %}
+            <button type="submit">Fazer logout</button>
+        </form>
+    {% else %}
+        <form method="post" action="/login/">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="digite o username..."/>
+            <input type="password" name="password" placeholder="digite a senha..."/>
+            <input type="hidden" name="next" value="/api/v1/docs"/>
+            <button type="submit">Fazer login</button>
+        </form>
+    {% endif %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+</body>
+</html>

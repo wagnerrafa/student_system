@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth import views
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -8,6 +9,8 @@ from rest_framework.schemas import get_schema_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', views.LoginView.as_view()),
+    path('logout/', views.LogoutView.as_view()),
     path('api/v1/aluno/', include('apps.student.urls', namespace='student')),
     path('api/v1/disciplina/', include('apps.discipline.urls', namespace='discipline')),
     path('api/v1/boletim/', include('apps.report_card.urls', namespace='report_card')),

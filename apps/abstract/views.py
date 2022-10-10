@@ -23,8 +23,7 @@ class UserApi(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         """
-           Create User receiving a dict
-           return user detail
+           Create User receiving a dict, return user detail
         """
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)

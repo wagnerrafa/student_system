@@ -38,10 +38,7 @@ class DisciplineApi(AbstractViewApi):
     ]
 
     def post(self, request, *args, **kwargs):
-        """
-           Create Discipline receiving a dict
-           return discipline detail
-        """
+        """Create Discipline receiving a dict, return discipline detail"""
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_user = serializer.validated_data
@@ -67,10 +64,7 @@ class DisciplineEditApi(AbstractViewApi):
     schema = AutoSchema(tags=["Disciplina"])
 
     def put(self, request, *args, **kwargs):
-        """
-           Update Discipline information receiving a dict
-           return discipline detail
-        """
+        """Update Discipline information receiving a dict, return discipline detail"""
         discipline_id = kwargs.get('id')
         discipline = get_object_or_404(Discipline, id=discipline_id)
         serializer = self.serializer_class(data=request.data, context={'request': request, 'discipline': discipline})

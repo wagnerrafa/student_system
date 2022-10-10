@@ -43,10 +43,7 @@ class StudentApi(AbstractViewApi):
     ]
 
     def post(self, request, *args, **kwargs):
-        """
-           Create Student receiving a dict
-           return student detail
-        """
+        """Create Student receiving a dict, return student detail"""
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         new_user = serializer.validated_data
@@ -71,10 +68,7 @@ class StudentEditApi(AbstractViewApi):
     schema = AutoSchema(tags=["Estudante"])
 
     def put(self, request, *args, **kwargs):
-        """
-           Update Student information receiving a dict
-           return student detail
-        """
+        """Update Student information receiving a dict, return student detail"""
         student_id = kwargs.get('id')
         student = get_object_or_404(Student, id=student_id)
         serializer = self.serializer_class(data=request.data, context={'request': request})

@@ -160,8 +160,9 @@ ASGI_APPLICATION = "deloitte_settings.asgi.application"
 # LOGIN
 
 LOGIN_URL = "/login/"
-LOGIN_REDIRECT_URL = "/myspace/"
-LOGOUT_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/api/v1/docs/"
+LOGIN_REDIRECT_URL = "/api/v1/docs/"
+LOGOUT_URL = "/logout/"
 
 # SITE ID
 SITE_ID = 1

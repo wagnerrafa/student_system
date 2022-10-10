@@ -208,18 +208,20 @@ class DBOperations:
         return rows
 
     def close_connection(self):
+        """Close the connection to the database"""
         if self.__cursor is not None:
             self.__cursor.close()
 
 
 class Command(BaseCommand):
-    help = 'run crontab events'
+    help = 'run shell menu to run database scripts'
 
     def printl(self, msg):
         self.stdout.write(self.style.SUCCESS(msg))
 
     @staticmethod
     def __prepare_django():
+        """Check and create the files needed to run locally on the server"""
         try:
             if os.path.exists('db.sqlite3') is False:
                 if os.path.exists('venv') is False:
@@ -236,6 +238,7 @@ class Command(BaseCommand):
             print('Siga o Readme para criar o ambiente e seu banco de dados antes de criar o fake_database novamente')
 
     def handle(self, *args, **options):
+        """Shell menu to run database scripts"""
         self.__prepare_django()
 
         db_operations = DBOperations()
@@ -264,4 +267,4 @@ class Command(BaseCommand):
                 print('Insira uma opção válida')
                 time.sleep(4)
             selected_option[0]()
-            time.sleep(5)
+            time.sleep(1)

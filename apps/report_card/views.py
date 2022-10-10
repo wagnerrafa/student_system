@@ -116,8 +116,7 @@ class ReportCardEditApi(AbstractViewApi):
 
     def put(self, request, *args, **kwargs):
         """
-           Update ReportCard information receiving a dict
-           return report_card detail
+           Update ReportCard information receiving a dict, return report_card detail
         """
         report_card_id = kwargs.get('id')
         report_card = get_object_or_404(ReportCard, id=report_card_id)
