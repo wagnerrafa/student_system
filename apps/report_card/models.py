@@ -13,3 +13,7 @@ class ReportCard(AbstractCommon):
 
     class Meta:
         verbose_name = 'Boletim'
+
+    def __str__(self):
+        return f'Estudante: {self.student.name}, Disciplina: {self.discipline.name}, Nota: {self.grade}, ' \
+               f'Entrega: {self.delivery_date}'

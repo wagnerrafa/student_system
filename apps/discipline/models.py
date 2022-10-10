@@ -9,3 +9,6 @@ class Discipline(AbstractCommon):
 
     class Meta:
         verbose_name = 'Disciplina'
+
+    def __str__(self):
+        return self.name

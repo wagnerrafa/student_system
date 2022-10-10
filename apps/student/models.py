@@ -10,3 +10,6 @@ class Student(AbstractCommon):
 
     class Meta:
         verbose_name = 'Aluno'
+
+    def __str__(self):
+        return self.name

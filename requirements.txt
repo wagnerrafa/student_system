@@ -15,6 +15,7 @@ Django==3.2.16
 django-allauth==0.51.0
 django-storages==1.13.1
 djangorestframework==3.14.0
+Faker==15.0.0
 gunicorn==20.1.0
 idna==3.4
 inflection==0.5.1
@@ -31,8 +32,10 @@ openapi-codec==1.3.2
 platformdirs==2.5.2
 pycparser==2.21
 PyJWT==2.5.0
+pylint==2.15.3
 pylint-plugin-utils==0.7
 pyrsistent==0.18.1
+python-dateutil==2.8.2
 python-decouple==3.6
 python3-openid==3.2.0
 pytz==2022.4
@@ -40,6 +43,7 @@ PyYAML==6.0
 requests==2.28.1
 requests-oauthlib==1.3.1
 simplejson==3.17.6
+six==1.16.0
 sqlparse==0.4.3
 static3==0.7.0
 tomli==2.0.1
