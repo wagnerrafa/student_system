@@ -204,7 +204,7 @@ class DBOperations:
         sql = self.__base_select_where.format('*', self.__db_name_report_card, f'grade < 5')
         rows = self.__get_by_sql(sql)
         for row in rows:
-            print(row, 'approved student')
+            print(row, 'reproved student')
         return rows
 
     def close_connection(self):
